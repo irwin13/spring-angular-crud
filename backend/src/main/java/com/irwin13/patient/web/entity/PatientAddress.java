@@ -7,9 +7,9 @@ import jakarta.persistence.*;
 public class PatientAddress {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "address_id")
-    private String addressId;
+    private Long addressId;
 
     @Column(name = "address")
     private String address;
@@ -27,11 +27,11 @@ public class PatientAddress {
     @JoinColumn(name = "pid")
     private Patient patient;
 
-    public String getAddressId() {
+    public Long getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(String addressId) {
+    public void setAddressId(Long addressId) {
         this.addressId = addressId;
     }
 

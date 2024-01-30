@@ -10,8 +10,8 @@ import java.util.List;
 public class Patient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String pid;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long pid;
 
     @Column(name = "first_name")
     private String firstName;
@@ -31,11 +31,11 @@ public class Patient {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "patient", cascade = CascadeType.ALL)
     private List<PatientAddress> patientAddressList;
 
-    public String getPid() {
+    public Long getPid() {
         return pid;
     }
 
-    public void setPid(String pid) {
+    public void setPid(Long pid) {
         this.pid = pid;
     }
 
