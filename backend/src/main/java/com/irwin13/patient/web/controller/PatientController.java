@@ -1,7 +1,7 @@
 package com.irwin13.patient.web.controller;
 
 import com.irwin13.patient.web.entity.Patient;
-import com.irwin13.patient.web.repository.PatientRepository;
+import com.irwin13.patient.web.service.PatientService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,15 +12,15 @@ import java.util.List;
 @RequestMapping("/patient")
 public class PatientController {
 
-    private final PatientRepository patientRepository;
+    private final PatientService patientService;
 
-    public PatientController(PatientRepository patientRepository) {
-        this.patientRepository = patientRepository;
+    public PatientController(PatientService patientService) {
+        this.patientService = patientService;
     }
 
     @GetMapping("/search")
     public List<Patient> getAll() {
-        return patientRepository.findAll();
+        return patientService.search();
     }
 
 }
