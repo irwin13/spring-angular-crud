@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.LinkedList;
@@ -42,11 +43,14 @@ public class PatientServiceTest {
         patient3.setFirstName("Third");
         list.add(patient3);
 
-        when(patientService.search()).thenReturn(list);
+        Page mockPage = mock(Page.class);
+        when(mockPage.getContent()).thenReturn(list);
+
+        when(patientService.getAll(0, 10)).thenReturn(mockPage);
 
         this.mockMvc.perform(get("/patient/search"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$.content", hasSize(3)));
 
     }
 }
