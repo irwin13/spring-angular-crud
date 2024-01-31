@@ -1,0 +1,67 @@
+<div *ngIf="viewMode; else editable">
+    <div *ngIf="currentPatient.pid">
+      <h4>Patient</h4>
+      <div>
+        <label><strong>First Name:</strong></label> {{ currentPatient.firstName }}
+      </div>
+      <div>
+        <label><strong>Last Name:</strong></label>
+        {{ currentPatient.lastName }}
+      </div>  
+      <a class="badge badge-warning"
+        routerLink="/patient/{{ currentPatient.pid }}">
+        Edit
+      </a>
+    </div>
+  
+    <div *ngIf="!currentPatient">
+      <br />
+      <p>Please click on a Patient...</p>
+    </div>
+  </div>
+  
+  <ng-template #editable>
+    <div *ngIf="currentPatient.pid" class="edit-form">
+      <h4>Patient</h4>
+      <form>
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            [(ngModel)]="currentPatient.firstName"
+            name="firstName"
+          />
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lastName"
+              [(ngModel)]="currentPatient.lastName"
+              name="lastName"
+            />
+          </div>    
+      </form>
+    
+      <button class="badge badge-danger mr-2" (click)="deletePatient()">
+        Delete
+      </button>
+  
+      <button
+        type="submit"
+        class="badge badge-success mb-2"
+        (click)="updatePatient()"
+      >
+        Update
+      </button>
+      <p>{{ message }}</p>
+    </div>
+  
+    <div *ngIf="!currentPatient.pid">
+      <br />
+      <p>Cannot access this Patient...</p>
+    </div>
+  </ng-template>
