@@ -6,7 +6,12 @@ import com.irwin13.patient.web.service.PatientService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/patient")
@@ -20,15 +25,36 @@ public class PatientController {
 
     @GetMapping("/search")
     public ResponseEntity<PageableResponse> search(@RequestParam(name = "start", defaultValue = "0") int start,
-                                 @RequestParam(name = "size", defaultValue = "10") int size) {
-
-        Page<Patient> page = patientService.getAll(start, size);
+                                                   @RequestParam(name = "size", defaultValue = "10") int size,
+                                                   @RequestParam(name = "pid", required = false, defaultValue = "0") long pid,
+                                                   @RequestParam(name = "name", required = false) String name) {
 
         PageableResponse<Patient> result = new PageableResponse();
-        result.setContent(page.getContent());
-        result.setTotalRecord(page.getTotalElements());
-        result.setNext(page.hasNext());
-        result.setPrevious(page.hasPrevious());
+
+        if (pid > 0) {
+            Optional<Patient> opt = patientService.findById(pid);
+            List<Patient> list = new LinkedList<>();
+            if (opt.isPresent()) {
+                list.add(opt.get());
+            }
+
+            result.setContent(list);
+            result.setTotalRecord(list.size());
+
+        } else if (!StringUtils.isEmpty(name)) {
+            List<Patient> list = patientService.findByName(name);
+
+            result.setContent(list);
+            result.setTotalRecord(list.size());
+
+        } else {
+            Page<Patient> page = patientService.getAll(start, size);
+
+            result.setContent(page.getContent());
+            result.setTotalRecord(page.getTotalElements());
+            result.setNext(page.hasNext());
+            result.setPrevious(page.hasPrevious());
+        }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
