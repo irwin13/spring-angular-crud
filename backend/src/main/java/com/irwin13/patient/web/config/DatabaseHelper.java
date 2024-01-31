@@ -14,9 +14,9 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Configuration
-public class DatabaseLoader {
+public class DatabaseHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseHelper.class);
 
     @Bean
     CommandLineRunner populatePatientData(PatientRepository patientRepository) {

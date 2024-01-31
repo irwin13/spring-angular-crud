@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.irwin13.patient.web.controller.PatientController;
 import com.irwin13.patient.web.entity.Patient;
 import com.irwin13.patient.web.service.PatientService;
@@ -27,8 +28,10 @@ public class PatientServiceTest {
     @MockBean
     PatientService patientService;
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @Test
-    void shouldReturnAllPatient() throws Exception {
+    void shouldReturnAll() throws Exception {
         List<Patient> list = new LinkedList<>();
 
         Patient patient1 = new Patient();
@@ -52,5 +55,49 @@ public class PatientServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(3)));
 
+    }
+
+    @Test
+    void shouldInsert() throws Exception {
+        Patient patient1 = new Patient();
+        patient1.setFirstName("First");
+
+        when(patientService.insert(patient1)).thenReturn(patient1);
+        String json = objectMapper.writeValueAsString(patient1);
+        this.mockMvc.perform(post("/patient")
+                        .header("Content-Type", "application/json")
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName").value("First"));
+        verify(patientService).insert(patient1);
+    }
+
+    @Test
+    void shouldUpdate() throws Exception {
+        Patient patient1 = new Patient();
+        patient1.setPid(1L);
+        patient1.setFirstName("First");
+
+        when(patientService.update(patient1)).thenReturn(patient1);
+
+        String json = objectMapper.writeValueAsString(patient1);
+        this.mockMvc.perform(put("/patient/1")
+                        .header("Content-Type", "application/json")
+                        .content(json))
+                .andExpect(status().isOk());
+
+        verify(patientService).update(patient1);
+    }
+
+    @Test
+    void shouldDelete() throws Exception {
+
+        doNothing().when(patientService).delete(1L);
+
+        this.mockMvc.perform(delete("/patient/1")
+                        .header("Content-Type", "application/json"))
+                .andExpect(status().isOk());
+
+        verify(patientService).delete(1L);
     }
 }

@@ -30,8 +30,8 @@ public class PatientService {
         return patientRepository.save(patient);
     }
 
-    public void delete(Patient patient) {
-        patientRepository.delete(patient);
+    public void delete(Long pid) {
+        patientRepository.deleteById(pid);
     }
 
     public Page<Patient> getAll(int start, int size) {
