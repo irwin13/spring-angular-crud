@@ -3,7 +3,7 @@ package com.irwin13.patient.web.entity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "patient")
@@ -29,7 +29,7 @@ public class Patient {
     private String phoneNo;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<PatientAddress> patientAddressList;
+    private Set<PatientAddress> patientAddresses;
 
     public Long getPid() {
         return pid;
@@ -79,12 +79,12 @@ public class Patient {
         this.phoneNo = phoneNo;
     }
 
-    public List<PatientAddress> getPatientAddressList() {
-        return patientAddressList;
+    public Set<PatientAddress> getPatientAddresses() {
+        return patientAddresses;
     }
 
-    public void setPatientAddressList(List<PatientAddress> patientAddressList) {
-        this.patientAddressList = patientAddressList;
+    public void setPatientAddresses(Set<PatientAddress> patientAddresses) {
+        this.patientAddresses = patientAddresses;
     }
 
     @Override
@@ -113,7 +113,6 @@ public class Patient {
                 ", dateOfBirth=" + dateOfBirth +
                 ", gender='" + gender + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
-                ", patientAddressList=" + patientAddressList +
                 '}';
     }
 }

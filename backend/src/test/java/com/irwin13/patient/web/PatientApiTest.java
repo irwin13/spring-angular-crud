@@ -20,12 +20,14 @@ public class PatientApiTest {
     TestRestTemplate testRestTemplate;
 
     @Test
-    void shouldReturnAllPatient() {
+    void shouldReturnAll() {
         // DatabaseLoader populate 2 rows
         ResponseEntity<PageableResponse> response = this.testRestTemplate
                 .getForEntity("http://localhost:" + port + "/patient/search", PageableResponse.class);
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(response.getBody().getContent().size()).isEqualTo(2);
+        assertThat(response.getBody().getTotalRecord()).isEqualTo(2L);
     }
 
 }

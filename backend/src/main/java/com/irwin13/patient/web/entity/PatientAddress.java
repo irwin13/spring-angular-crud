@@ -1,5 +1,6 @@
 package com.irwin13.patient.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -24,7 +25,8 @@ public class PatientAddress {
     private Integer postCode;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pid")
+    @JoinColumn(name = "patient_id")
+    @JsonIgnore
     private Patient patient;
 
     public Long getAddressId() {
@@ -83,7 +85,6 @@ public class PatientAddress {
                 ", suburb='" + suburb + '\'' +
                 ", state='" + state + '\'' +
                 ", postCode=" + postCode +
-                ", patient=" + patient +
                 '}';
     }
 
