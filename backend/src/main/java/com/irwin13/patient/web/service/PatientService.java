@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,9 @@ public class PatientService {
     }
 
     public List<Patient> findByName(String name) {
+        if (!StringUtils.isEmpty(name)) {
+            name = "%" + name + "%";
+        }
         return patientRepository.findByName(name);
     }
 
